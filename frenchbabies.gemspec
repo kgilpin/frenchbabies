@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["kgilpin@gmail.com"]
   spec.description   = %q{FrenchBabies blog engine}
   spec.summary       = %q{FrenchBabies blog engine}
-  spec.homepage      = "frenchbabies.com"
+  spec.homepage      = "http://frenchbabies.com"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   
   spec.add_dependency "mail"
+  spec.add_dependency "configliere"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
