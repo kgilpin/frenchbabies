@@ -9,7 +9,12 @@ module FrenchBabies
     end
 
     def tick
-      Publisher.publish Scanner.scan
+      messages = Scanner.scan
+      unless messages.empty?
+        puts "Processing messages from:"
+        puts messages.map(&:sender).join("\n")
+      end
+      Publisher.publish messages
     end
     
     protected
