@@ -19,8 +19,8 @@ module FrenchBabies
       Mail.defaults do
         retriever_method :pop3, :address    => "pop.gmail.com",
                                 :port       => 995,
-                                :user_name  => Settings[:email_user_name],
-                                :password   => Settings[:email_password],
+                                :user_name  => Settings[:"email-user-name"],
+                                :password   => Settings[:"email-password"],
                                 :enable_ssl => true
       end
     end
