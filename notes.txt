@@ -1,0 +1,27 @@
+require 'yaml'
+config = YAML.load(File.read('.google-api.yaml'))
+ 
+require 'oauth2'
+
+auth_client = OAuth2::Client.new config['client_id'], config['client_secret'], {:site => 'https://accounts.google.com', :authorize_url => "/o/oauth2/auth", :token_url => "/o/oauth2/token"}
+access_token = OAuth2::AccessToken.new(auth_client, 'foobar', refresh_token: config['refresh_token'])
+token = access_token.refresh!
+
+api_client = OAuth2::Client.new config['client_id'], config['client_secret'], site: 'https://sites.google.com'
+access_token = OAuth2::AccessToken.new(api_client, token.token, token.to_hash)
+
+require 'nokogiri'
+
+Nokogiri::XML.parse access_token.get('feeds/site/site').body
+
+siteid = "https://sites.google.com/feeds/site/site/frenchbabiesbyaudrey"
+# Also:
+# Nokogiri::XML.parse(access_token.get('feeds/site/site').body).xpath("//xmlns:entry[xmlns:title = 'FrenchBabies']/xmlns:id").text
+
+Nokogiri::XML.parse(access_token.get('feeds/site/site').body).xpath("//xmlns:entry[xmlns:title = 'FrenchBabies']/xmlns:link[@rel = 'self']").first['href']
+# https://sites.google.com/feeds/site/site/frenchbabiesbyaudrey
+
+puts Nokogiri::XML.parse(access_token.get('/feeds/content/site/frenchbabiesbyaudrey?kind=announcementspage').body).xpath("//xmlns:entry[xmlns:title='Home']/xmlns:link[@rel='self']")
+# <link rel="self" type="application/atom+xml" href="https://sites.google.com/feeds/content/site/frenchbabiesbyaudrey/2788880672212124750"/>
+# Home page id
+# https://sites.google.com/feeds/content/site/frenchbabiesbyaudrey/2788880672212124750

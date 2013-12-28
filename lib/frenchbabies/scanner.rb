@@ -17,7 +17,7 @@ module FrenchBabies
             body.compact!
             body = body.join("\n")
             images = mail.attachments.map do |attachment|
-              Image.new(attachment.filename, attachment.body.decoded)
+              Image.new(attachment.filename, attachment.content_type, attachment.body.decoded)
             end
           else
             body = mail.body.decoded

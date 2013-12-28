@@ -1,4 +1,6 @@
 require "frenchbabies/version"
+require "frenchbabies/configuration"
+require "frenchbabies/googlesites"
 require "frenchbabies/scanner"
 require "frenchbabies/publisher"
 
@@ -6,6 +8,14 @@ module FrenchBabies
   class << self
     def initialize
       configure_mail
+    end
+    
+    def homepage_id
+      "https://sites.google.com/feeds/content/site/frenchbabiesbyaudrey/2788880672212124750"
+    end
+    
+    def googlesites
+      GoogleSites.new
     end
 
     def tick

@@ -1,3 +1,5 @@
+.env
+.google-api.yaml
 *.gem
 *.rbc
 .bundle
