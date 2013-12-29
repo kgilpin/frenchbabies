@@ -39,9 +39,6 @@ module FrenchBabies
           false
         end
       end
-      unless messages.empty?
-        puts messages.map(&:sender).join("\n")
-      end
       Publisher.publish messages
     end
     
