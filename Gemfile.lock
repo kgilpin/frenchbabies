@@ -1,13 +1,3 @@
-PATH
-  remote: .
-  specs:
-    frenchbabies (0.1.0)
-      activesupport
-      configliere
-      mail
-      nokogiri
-      oauth2
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -79,8 +69,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport
   bundler (~> 1.3)
+  configliere
   cucumber
-  frenchbabies!
+  mail
+  nokogiri
+  oauth2
   rake
   rspec
