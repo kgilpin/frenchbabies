@@ -47,8 +47,8 @@ module FrenchBabies
     def configure_mail
       require "mail"
       Mail.defaults do
-        retriever_method :pop3, :address    => "pop.gmail.com",
-                                :port       => 995,
+        retriever_method :imap, :address    => "imap.googlemail.com",
+                                :port       => 993,
                                 :user_name  => Settings[:"email-user-name"],
                                 :password   => Settings[:"email-password"],
                                 :enable_ssl => true

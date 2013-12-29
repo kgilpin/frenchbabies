@@ -6,6 +6,11 @@ module FrenchBabies
       def scan
         messages = []
         Mail.find_and_delete(:what => :first, :count => 10, :order => :asc).each do |mail|
+          sender = mail.sender || mail.from[0]
+          unless sender
+            $stderr.puts "No sender found on message #{mail.message_id}"
+          end
+          
           body = nil
           images = []
           if mail.multipart?
@@ -27,7 +32,7 @@ module FrenchBabies
           else
             body = mail.body.decoded
           end
-          messages << Message.new(mail.sender, mail.subject, body, images)
+          messages << Message.new(sender, mail.subject, body, images)
         end
         messages
       end
