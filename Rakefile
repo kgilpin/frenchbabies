@@ -1,4 +1,6 @@
-require "bundler/gem_tasks"
+#!/usr/bin/env rake
+
+$LOAD_PATH << File.expand_path('lib', File.dirname(__FILE__))
 
 task :tick do
   require 'frenchbabies'
