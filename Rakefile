@@ -11,8 +11,11 @@ task :tick do
   Settings.resolve!
   
   FrenchBabies.initialize
-  
   FrenchBabies.tick
-  
-  
+end
+
+task :secret, :email do |task,args|
+  require 'frenchbabies'
+  email = args[:email]
+  puts FrenchBabies.secret_code(email)
 end

@@ -17,11 +17,28 @@ module FrenchBabies
     def googlesites
       GoogleSites.new
     end
+    
+    def secret_code(email)
+      require 'digest/md5'
+      Digest::MD5.hexdigest([FrenchBabies.secret, email].join(':'))[0...4]
+    end
+    
+    def secret
+      Settings[:secret]
+    end
 
     def tick
       messages = Scanner.scan
+      messages.select! do |message|
+        if message.authorize?
+          puts "Processing message \"#{message.title}\" from #{message.sender}"
+          true
+        else
+          puts "Discarding message \"#{message.title}\" from #{message.sender}"
+          false
+        end
+      end
       unless messages.empty?
-        puts "Processing messages from:"
         puts messages.map(&:sender).join("\n")
       end
       Publisher.publish messages
