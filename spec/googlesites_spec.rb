@@ -17,26 +17,27 @@ describe GoogleSites do
     
     let(:sender) { "me@example.com" }
     let(:title) { "the title" }
-    let(:content) { "the message" } 
-    let(:image) { FrenchBabies::Image.new("the image", "image/png", "the-encoded-image-body") }
+    let(:content) { "the message\n\nlink to @@title@@" } 
+    let(:image) { FrenchBabies::Image.new("the image", "image/png", "the-raw-image-body") }
     
     context "content and image" do
       it "submits the document and attachment" do
         message_payload = {
-          :headers=>{"Content-Type"=>"application/atom+xml", "Content-Length"=>"519"},
+          :headers=>{"Content-Type"=>"application/atom+xml", "Content-Length"=>"589"},
           :body=> <<-BODY
-<entry xmlns="http://www.w3.org/2005/Atom">
+<entry xmlns="http://www.w3.org/2005/Atom" xmlns:sites="http://schemas.google.com/sites/2008">
   <category scheme="http://schemas.google.com/g/2005#kind"
       term="http://schemas.google.com/sites/2008#announcement" label="announcement"/>
   <link rel="http://schemas.google.com/sites/2008#parent" type="application/atom+xml"
       href="https://sites.google.com/feeds/content/site/frenchbabiesbyaudrey/2788880672212124750"/>
   <title>the title</title>
-  <content type="xhtml">
-    <div xmlns="http://www.w3.org/1999/xhtml">
+  <sites:pageName>the-title</sites:pageName>
+  <content type="html">
 <![CDATA[
 the message
+
+link to the-title
 ]]>
-    </div>
   </content>
 </entry>
 BODY
@@ -44,18 +45,19 @@ BODY
         response = double(:response, body: <<-RESPONSE_BODY)
 <entry xmlns="http://www.w3.org/2005/Atom">
   <link rel="self" href="https://sites.google.com/feeds/content/site/frenchbabiesbyaudrey/the-id"/>
+  <title>the-title</title>
 </entry>
         RESPONSE_BODY
 
         image_payload = {
-          :headers=>{"Content-Type"=>"multipart/related; boundary=END_OF_PART", "Content-Length"=>"580"},
+          :headers=>{"Content-Type"=>"multipart/related; boundary=END_OF_PART", "Content-Length"=>"520"},
           :body=> <<-BODY
 --END_OF_PART
 Content-Type: application/atom+xml
-          
+
 <entry xmlns="http://www.w3.org/2005/Atom">
   <category scheme="http://schemas.google.com/g/2005#kind"
-      term="http://schemas.google.com/sites/2008#announcement" label="attachment"/>
+      term="http://schemas.google.com/sites/2008#attachment" label="attachment"/>
   <link rel="http://schemas.google.com/sites/2008#parent" type="application/atom+xml"
       href="https://sites.google.com/feeds/content/site/frenchbabiesbyaudrey/the-id"/>
   <title>the image</title>
@@ -63,9 +65,8 @@ Content-Type: application/atom+xml
 
 --END_OF_PART
 Content-Type: image/png
-Content-Transfer-Encoding: BASE64
 
-dGhlLWVuY29kZWQtaW1hZ2UtYm9keQ==
+the-raw-image-body
 
 --END_OF_PART--
 BODY

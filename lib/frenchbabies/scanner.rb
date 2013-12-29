@@ -15,10 +15,15 @@ module FrenchBabies
             end
             body << mail.body.epilogue
             body.compact!
-            body = body.join("\n")
             images = mail.attachments.map do |attachment|
+              body << <<-IMG
+<a href="/site/frenchbabiesbyaudrey/home/@@title@@/#{attachment.filename}">
+ <img src="/site/frenchbabiesbyaudrey/home/@@title@@/#{attachment.filename}" border="0" style="max-width: 600px">
+</a>
+              IMG
               Image.new(attachment.filename, attachment.content_type, attachment.body.decoded)
             end
+            body = body.join("\n")
           else
             body = mail.body.decoded
           end

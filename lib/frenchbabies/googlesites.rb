@@ -11,19 +11,22 @@ module FrenchBabies
     end
     
     def create_page(message)
+      require 'active_support/core_ext'
+      
+      slug = message.title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+      
       body = <<-MSG
-<entry xmlns="http://www.w3.org/2005/Atom">
+<entry xmlns="http://www.w3.org/2005/Atom" xmlns:sites="http://schemas.google.com/sites/2008">
   <category scheme="http://schemas.google.com/g/2005#kind"
       term="http://schemas.google.com/sites/2008#announcement" label="announcement"/>
   <link rel="http://schemas.google.com/sites/2008#parent" type="application/atom+xml"
       href="#{FrenchBabies.homepage_id}"/>
   <title>#{message.title.encode(:xml => :text)}</title>
-  <content type="xhtml">
-    <div xmlns="http://www.w3.org/1999/xhtml">
+  <sites:pageName>#{slug.encode(:xml => :text)}</sites:pageName>
+  <content type="html">
 <![CDATA[
-#{message.body}
+#{message.body.gsub("@@title@@", slug)}
 ]]>
-    </div>
   </content>
 </entry>
       MSG
@@ -36,22 +39,24 @@ module FrenchBabies
         body: body
       }
      
-      p payload
+      # p payload
       
       message_body = api_token.post("feeds/content/site/frenchbabiesbyaudrey", payload).body
       
-      p message_body
+      # p message_body
       
-      message_id = Nokogiri::XML.parse(message_body).xpath("//xmlns:link[@rel='self']").first['href']
+      message_body = Nokogiri::XML.parse(message_body)
+      message_id = message_body.xpath("//xmlns:link[@rel='self']").first['href']
+      message_title    = message_body.xpath("//xmlns:title").text
       
       message.images.each do |attachment|
         body = <<-MSG
 --END_OF_PART
 Content-Type: application/atom+xml
-          
+
 <entry xmlns="http://www.w3.org/2005/Atom">
   <category scheme="http://schemas.google.com/g/2005#kind"
-      term="http://schemas.google.com/sites/2008#announcement" label="attachment"/>
+      term="http://schemas.google.com/sites/2008#attachment" label="attachment"/>
   <link rel="http://schemas.google.com/sites/2008#parent" type="application/atom+xml"
       href="#{message_id}"/>
   <title>#{attachment.title.encode(:xml => :text)}</title>
@@ -59,9 +64,9 @@ Content-Type: application/atom+xml
 
 --END_OF_PART
 Content-Type: #{attachment.content_type}
-Content-Transfer-Encoding: BASE64
 
-#{Base64.encode64 attachment.body}
+#{attachment.body}
+
 --END_OF_PART--
         MSG
         
@@ -73,7 +78,7 @@ Content-Transfer-Encoding: BASE64
           body: body
         }
         
-        p payload
+        # p payload
         
         api_token.post("feeds/content/site/frenchbabiesbyaudrey", payload)
       end

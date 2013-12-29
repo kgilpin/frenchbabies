@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     frenchbabies (0.1.0)
+      activesupport
       configliere
       mail
       nokogiri
@@ -10,6 +11,13 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (4.0.2)
+      i18n (~> 0.6, >= 0.6.4)
+      minitest (~> 4.2)
+      multi_json (~> 1.3)
+      thread_safe (~> 0.1)
+      tzinfo (~> 0.3.37)
+    atomic (1.1.14)
     builder (3.2.2)
     configliere (0.4.18)
       highline (>= 1.5.2)
@@ -27,6 +35,7 @@ GEM
       multi_json (~> 1.3)
     highline (1.6.20)
     httpauth (0.2.0)
+    i18n (0.6.9)
     jwt (0.1.8)
       multi_json (>= 1.5)
     mail (2.5.4)
@@ -34,6 +43,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.25.1)
     mini_portile (0.5.2)
+    minitest (4.7.5)
     multi_json (1.8.2)
     multi_test (0.0.2)
     multi_xml (0.5.5)
@@ -58,9 +68,12 @@ GEM
     rspec-expectations (2.14.4)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.4)
+    thread_safe (0.1.3)
+      atomic
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
+    tzinfo (0.3.38)
 
 PLATFORMS
   ruby

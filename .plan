@@ -1,0 +1,8 @@
+TODO
+
+* Add authorized sender whitelist
+* Set up "rake tick" on Heroku scheduler
+
+DONE
+
+* Debug attachments in https://developers.google.com/oauthplayground/?code=4/6Q8TY2BKzN3RkbqRC8cjR6iJ84qr.8vxkJBBimdYeaDn_6y0ZQNhY6hg4hgI
