@@ -32,6 +32,7 @@ module FrenchBabies
           else
             body = mail.body.decoded
           end
+          
           messages << Message.new(sender, mail.subject, body, images)
         end
         messages
@@ -46,7 +47,9 @@ module FrenchBabies
           end
         elsif part.content_type =~ /^text\/x?html\b/
           body << part.body.decoded
-        elsif part.content_type =~ /^image\// || part.content_type =~ /^text\/plain\b/
+        elsif part.content_type =~ /^text\/plain\b/
+          body << part.body.decoded.encode(xml: :text)
+        elsif part.content_type =~ /^image\//
           # pass
         else
           $stderr.puts "Unrecognized content type '#{part.content_type}' in mail part"
