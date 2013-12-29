@@ -19,12 +19,13 @@ module FrenchBabies
     end
     
     def secret_code(email)
+      raise "email is required" unless email
       require 'digest/md5'
       Digest::MD5.hexdigest([FrenchBabies.secret, email].join(':'))[0...4]
     end
     
     def secret
-      Settings[:secret]
+      Settings[:secret] or raise "secret is not configured"
     end
 
     def tick
